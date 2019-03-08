@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ym.smdsj.dao.AuthAccountLogMapper">
+  <resultMap id="BaseResultMap" type="com.ym.smdsj.domain.po.AuthAccountLog">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="LOG_NAME" jdbcType="VARCHAR" property="logName" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SUCCEED" jdbcType="TINYINT" property="succeed" />
+    <result column="MESSAGE" jdbcType="VARCHAR" property="message" />
+    <result column="IP" jdbcType="VARCHAR" property="ip" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, LOG_NAME, USER_ID, CREATE_TIME, SUCCEED, MESSAGE, IP
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auth_account_log
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auth_account_log
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.ym.smdsj.domain.po.AuthAccountLog" useGeneratedKeys="true">
+    insert into auth_account_log (LOG_NAME, USER_ID, CREATE_TIME, 
+      SUCCEED, MESSAGE, IP
+      )
+    values (#{logName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{succeed,jdbcType=TINYINT}, #{message,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.ym.smdsj.domain.po.AuthAccountLog" useGeneratedKeys="true">
+    insert into auth_account_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logName != null">
+        LOG_NAME,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="succeed != null">
+        SUCCEED,
+      </if>
+      <if test="message != null">
+        MESSAGE,
+      </if>
+      <if test="ip != null">
+        IP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logName != null">
+        #{logName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="succeed != null">
+        #{succeed,jdbcType=TINYINT},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ym.smdsj.domain.po.AuthAccountLog">
+    update auth_account_log
+    <set>
+      <if test="logName != null">
+        LOG_NAME = #{logName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="succeed != null">
+        SUCCEED = #{succeed,jdbcType=TINYINT},
+      </if>
+      <if test="message != null">
+        MESSAGE = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ym.smdsj.domain.po.AuthAccountLog">
+    update auth_account_log
+    set LOG_NAME = #{logName,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      SUCCEED = #{succeed,jdbcType=TINYINT},
+      MESSAGE = #{message,jdbcType=VARCHAR},
+      IP = #{ip,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ym.smdsj.dao.AuthOperationLogMapper">
+  <resultMap id="BaseResultMap" type="com.ym.smdsj.domain.po.AuthOperationLog">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="LOG_NAME" jdbcType="VARCHAR" property="logName" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="API" jdbcType="VARCHAR" property="api" />
+    <result column="METHOD" jdbcType="VARCHAR" property="method" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SUCCEED" jdbcType="TINYINT" property="succeed" />
+    <result column="MESSAGE" jdbcType="VARCHAR" property="message" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, LOG_NAME, USER_ID, API, METHOD, CREATE_TIME, SUCCEED, MESSAGE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from auth_operation_log
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from auth_operation_log
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="ID" keyProperty="id" parameterType="com.ym.smdsj.domain.po.AuthOperationLog" useGeneratedKeys="true">
+    insert into auth_operation_log (LOG_NAME, USER_ID, API, 
+      METHOD, CREATE_TIME, SUCCEED, 
+      MESSAGE)
+    values (#{logName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{api,jdbcType=VARCHAR}, 
+      #{method,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{succeed,jdbcType=TINYINT}, 
+      #{message,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="ID" keyProperty="id" parameterType="com.ym.smdsj.domain.po.AuthOperationLog" useGeneratedKeys="true">
+    insert into auth_operation_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logName != null">
+        LOG_NAME,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="api != null">
+        API,
+      </if>
+      <if test="method != null">
+        METHOD,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="succeed != null">
+        SUCCEED,
+      </if>
+      <if test="message != null">
+        MESSAGE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logName != null">
+        #{logName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="api != null">
+        #{api,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="succeed != null">
+        #{succeed,jdbcType=TINYINT},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ym.smdsj.domain.po.AuthOperationLog">
+    update auth_operation_log
+    <set>
+      <if test="logName != null">
+        LOG_NAME = #{logName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="api != null">
+        API = #{api,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        METHOD = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="succeed != null">
+        SUCCEED = #{succeed,jdbcType=TINYINT},
+      </if>
+      <if test="message != null">
+        MESSAGE = #{message,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ym.smdsj.domain.po.AuthOperationLog">
+    update auth_operation_log
+    set LOG_NAME = #{logName,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=VARCHAR},
+      API = #{api,jdbcType=VARCHAR},
+      METHOD = #{method,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      SUCCEED = #{succeed,jdbcType=TINYINT},
+      MESSAGE = #{message,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
