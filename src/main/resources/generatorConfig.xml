@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!-- 数据库驱动:选择你的本地硬盘上面的数据库驱动包，可以pom.xml中设置-->
+    <!--<classPathEntry  location="/Users/ym/Works/Tools/MavenResponsity/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar"/>-->
+
+    <!-- 配置环境
+     defaultModelType:指定生成模型类型策略
+     1.conditional:这是默认值,这个模型和下面的hierarchical类似，除了如果那个单独的类将只包含一个字段，将不会生成一个单独的类。 因此,如果一个
+     表的主键只有一个字段,那么不会为该字段生成单独的实体类,会将该字段合并到基本实体类中。
+     2.flat:该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。
+     3.hierarchical:如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段， 则会为表生成一个包含所有BLOB字段的单独的实体类,然
+     后为所有其他的字段生成一个单独的实体类。 MBG会在所有生成的实体类之间维护一个继承关系。 -->
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!--避免生成重复xml文件代码的插件-->
+        <plugin type="com.ym.smdsj.plugins.OverIsMergeablePlugin"/>
+
+        <!--是否在代码中显示注释-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+
+        <!--数据库链接地址账号密码-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:53306/usthe"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
+        <!--该属性可以控制是否强制DECIMAL和NUMERIC类型的字段转换为Java类型的java.math.BigDecimal,默认值为false，一般不需要配置~-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!--生成pojo类存放位置-->
+        <javaModelGenerator targetPackage="com.ym.smdsj.domain.po" targetProject="src/main/java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成xml映射文件存放位置-->
+
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--生成mapper类存放位置-->
+        <!-- targetProject:mapper映射文件生成的位置
+          如果maven工程只是单独的一个工程，targetProject="src/main/java"
+          若果maven工程是分模块的工程，targetProject="所属模块的名称"，例如：
+          targetProject="ecps-manager-mapper"，下同-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ym.smdsj.dao" targetProject="src/main/java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--生成对应表及类名-->
+
+        <table tableName="auth%"  enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <property name="my.isgen.usekeys" value="true"/>
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+
+        <!--<table tableName="auth_user_role" domainObjectName="AuthUserRole" enableCountByExample="false"-->
+               <!--enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<property name="my.isgen.usekeys" value="true"/>-->
+            <!--<property name="useActualColumnNames" value="false"/>-->
+            <!--<generatedKey column="id" sqlStatement="JDBC"/>-->
+        <!--</table>-->
+        <!--
+            tableName：指定要生成的表名，可以使用SQL通配符匹配多个表，如：<table tableName="%" />
+
+            该元素包含多个可选属性：
+
+            schema:数据库的schema，可以使用SQL通配符匹配。设置后，生成SQL的表名会变成如schema.tableName的形式。
+            catalog:数据库的catalog，如果设置了该值，生成SQL的表名会变成如catalog.tableName的形式。
+            alias:如果指定，这个值会用在生成的select查询SQL的表的别名和列名上，列名会被别名为alias_actualColumnName这种模式。
+            domainObjectName:生成对象的基本名称，如果没有指定，MBG会自动根据表名来生成名称。
+            enableXXX:XXX代表多种SQL方法，该属性用来指定是否生成对应的XXX语句。
+            modelType:和<context>的defaultModelType含义一样，这里可以针对表进行配置，这里的配置会覆盖<context>的defaultModelType配置。
+            escapeWildcards:这个属性表示当查询列，是否对schema和表名中的SQL通配符('_' and '%')进行转义，默认false。
+            delimitIdentifiers:是否给标识符增加**分隔符**，默认false。当catalog,schema或tableName中包含空白时，默认true。
+            delimitAllColumns:是否对所有列添加**分隔符**，默认false。
+
+            除了<property>子元素外，<table>还包含以下子元素：
+
+            <generatedKey> (0个或1个):用来指定自动生成主键的属性，如果指定这个元素，MBG在生成insert的SQL映射文件中插入一个<selectKey>元素。也就是数据库自增后如果需要知道值，就用这个，这个是将自增结果回填到对象中。
+            <columnRenamingRule> (0个或1个):用来在MBG生成列之前，对列进行重命名。对于存在同一前缀的字段想在生成属性名时去除前缀的表非常有用。
+            <columnOverride> (0个或多个):用来修改表中某个列的属性(属性名、数据类型)，MBG会使用修改后的列来生成domain的属性。
+            <ignoreColumn> (0个或多个):用来屏蔽不需要生成的列。
+            -->
+
+    </context>
+</generatorConfiguration>
