@@ -1,4 +1,4 @@
-package com.ym.smdsj.config;
+package com.ym.smdsj.config.restful;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
