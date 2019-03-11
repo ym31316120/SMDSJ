@@ -1,5 +1,6 @@
 package com.ym.smdsj;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2019/3/4
  */
 @SpringBootApplication
+@MapperScan("com.ym.smdsj.dao")
 public class SmdsjApplication {
 
     public static void main(String[] args) {

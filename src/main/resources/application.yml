@@ -2,3 +2,24 @@ server:
   port: 8080
   servlet:
     context-path: /smdsj
+
+
+mybatis:
+  # 指向实体类包路径
+  type-aliases-package: com.ym.smdsj.domain.po
+  # mapper xml 文件地址
+  mapper-locations: classpath:mapper/*.xml
+  # 检查 mybatis 配置是否存在，一般命名为 mybatis-config.xml
+  check-config-location: true
+  # 执行模式。默认是 SIMPLE
+  executor-type: simple
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:53306/usthe?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+    platform: mysql
+
+

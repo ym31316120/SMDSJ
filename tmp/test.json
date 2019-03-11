@@ -1,0 +1,27 @@
+{
+  "message": "",
+  "successResponse": true,
+  "siteId": "cn",
+  "requestId": "70ab17d4-8376-470c-a6a0-7bc1878e0f8e",
+  "locale": "zh",
+  "data": {
+    "PageNumber": 1,
+    "Datas": {
+      "Item": [
+        {
+          "CategoryName": "活动消息-优惠活动",
+          "Content": "",
+          "GmtCreated": 1551842154000,
+          "Memo": "",
+          "MsgId": 7306320733,
+          "Status": 0,
+          "Title": "【3月采购季】开年Hi购，云产品低至5折, 最高还有满返7500元"
+        }
+      ]
+    },
+    "TotalCount": 1,
+    "PageSize": 10
+  },
+  "code": "200",
+  "bid": "26842"
+}

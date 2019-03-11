@@ -1,0 +1,77 @@
+{
+  "message": "",
+  "successResponse": true,
+  "siteId": "cn",
+  "requestId": "5c1029ea-058a-4ee6-97c3-773803a12a78",
+  "locale": "zh",
+  "data": [
+    {
+      "Id": 1,
+      "ReadCount": 7,
+      "TotalCount": 7,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 2,
+      "ReadCount": 11,
+      "TotalCount": 11,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 3,
+      "ReadCount": 2,
+      "TotalCount": 2,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 4,
+      "ReadCount": 12,
+      "TotalCount": 13,
+      "UnReadCount": 1
+    },
+    {
+      "Id": 20,
+      "ReadCount": 11,
+      "TotalCount": 11,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 6,
+      "ReadCount": 4,
+      "TotalCount": 4,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 25,
+      "ReadCount": 1,
+      "TotalCount": 1,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 24,
+      "ReadCount": 1,
+      "TotalCount": 1,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 27,
+      "ReadCount": 3,
+      "TotalCount": 3,
+      "UnReadCount": 0
+    },
+    {
+      "Id": 14,
+      "ReadCount": 11,
+      "TotalCount": 12,
+      "UnReadCount": 1
+    },
+    {
+      "Id": 15,
+      "ReadCount": 1,
+      "TotalCount": 1,
+      "UnReadCount": 0
+    }
+  ],
+  "code": "200",
+  "bid": "26842"
+}
