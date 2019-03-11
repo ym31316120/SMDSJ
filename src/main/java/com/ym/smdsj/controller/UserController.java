@@ -7,6 +7,8 @@ import com.ym.smdsj.domain.vo.RequestResult;
 import com.ym.smdsj.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     private UserService userService;
 
 
@@ -34,6 +38,7 @@ public class UserController {
         RequestResult<PageInfo> requestResult = new RequestResult<>();
         try {
             PageInfo<AuthUser> pageInfo = userService.getUserListByPageInfo(pageNum, pageSize);
+            LOGGER.info("测试日志信息");
             requestResult.addData(pageInfo).success(200, "");
         } catch (Exception e) {
             e.printStackTrace();
