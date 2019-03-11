@@ -1,5 +1,7 @@
 package com.ym.smdsj.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ym.smdsj.dao.AuthUserMapper;
 import com.ym.smdsj.domain.po.AuthUser;
 import com.ym.smdsj.service.UserService;
@@ -23,6 +25,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<AuthUser> getUserList() throws DataAccessException {
         return authUserMapper.selectUserList();
+    }
+
+    @Override
+    public PageInfo<AuthUser> getUserListByPageInfo(Integer pageNum,Integer pageSize) throws DataAccessException {
+        PageHelper.startPage(pageNum, pageSize);
+        List<AuthUser> authUsers = this.getUserList();
+        return new PageInfo<>(authUsers);
     }
 
     @Autowired
