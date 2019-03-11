@@ -3,6 +3,7 @@ package com.ym.smdsj.controller;
 import com.ym.smdsj.domain.po.AuthUser;
 import com.ym.smdsj.domain.vo.RequestResult;
 import com.ym.smdsj.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class UserController {
 
     private UserService userService;
 
+    @ApiOperation(value = "获取用户列表",notes = "GET获取所有注册用户的信息列表")
     @GetMapping("/list/")
     public RequestResult<List<AuthUser>> getUserList(){
         RequestResult<List<AuthUser>> requestResult = new RequestResult<>();
