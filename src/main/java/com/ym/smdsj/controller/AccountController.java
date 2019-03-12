@@ -26,7 +26,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/account")
-public class AccountController {
+public class AccountController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
 
@@ -36,7 +36,7 @@ public class AccountController {
     @PostMapping("/register")
     public RequestResult register(HttpServletRequest request) {
 
-        Map<String, String> params = RequestResponseUtil.getRequestBodyMap(request);
+        Map<String, String> params = getRequestBody(request);
         AuthUser authUser = new AuthUser();
         String uid = params.get("uid");
         String password = params.get("password");
