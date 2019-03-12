@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService {
         return new PageInfo<>(authUsers);
     }
 
+    @Override
+    public AuthUser getUserByAppId(String appId) {
+        return authUserMapper.selectByUniqueKey(appId);
+    }
+
     @Autowired
     public void setAuthUserMapper(AuthUserMapper authUserMapper) {
         this.authUserMapper = authUserMapper;

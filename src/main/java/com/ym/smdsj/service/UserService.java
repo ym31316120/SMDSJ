@@ -15,4 +15,6 @@ public interface UserService {
     List<AuthUser> getUserList() throws DataAccessException;
 
     PageInfo<AuthUser> getUserListByPageInfo(Integer pageNum,Integer pageSize) throws DataAccessException;
+
+    AuthUser getUserByAppId(String appId);
 }

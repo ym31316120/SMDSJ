@@ -1,12 +1,14 @@
 package com.ym.smdsj.domain.vo;
 
+import java.util.Map;
+
 /**
  * 请求结果实体
  *
  * @author ym
  * @date 2019/3/11
  */
-public class RequestResult<T> {
+public class RequestResult<T>{
 
     private int code;
 

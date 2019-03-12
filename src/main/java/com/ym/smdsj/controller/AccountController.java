@@ -3,22 +3,27 @@ package com.ym.smdsj.controller;
 import com.ym.smdsj.domain.po.AuthUser;
 import com.ym.smdsj.domain.vo.RequestResult;
 import com.ym.smdsj.service.AccountService;
+import com.ym.smdsj.service.UserService;
 import com.ym.smdsj.support.factory.LogTaskFactory;
 import com.ym.smdsj.support.manager.LogExeManager;
-import com.ym.smdsj.util.IpUtil;
-import com.ym.smdsj.util.RequestResponseUtil;
+import com.ym.smdsj.util.*;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ym
@@ -29,8 +34,43 @@ import java.util.Map;
 public class AccountController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
+    private StringRedisTemplate redisTemplate;
 
     private AccountService accountService;
+
+    private UserService userService;
+
+    /**
+     *这里已经在 passwordFilter 进行了登录认证
+     * @Param [] 登录签发 JWT
+     * @Return java.lang.String
+     */
+    @ApiOperation(value = "用户登录", notes = "POST用户登录签发JWT")
+    @PostMapping("/login")
+    public RequestResult accountLogin(HttpServletRequest request) {
+        Map<String, String> params = getRequestBody(request);
+        String appId = params.get("appId");
+        // 根据appId获取其对应所拥有的角色(这里设计为角色对应资源，没有权限对应资源)
+        String roles = accountService.loadAccountRole(appId);
+        // 时间以秒计算,token有效刷新时间是token有效过期时间的2倍
+        long refreshPeriodTime = 36000L;
+        String jwt = JsonWebTokenUtil.issueJWT(UUID.randomUUID().toString(), appId,
+                "token-server", refreshPeriodTime >> 1, roles, null, SignatureAlgorithm.HS512);
+        // 将签发的JWT存储到Redis： {JWT-SESSION-{appID} , jwt}
+        redisTemplate.opsForValue().set("JWT-SESSION-" + appId, jwt, refreshPeriodTime, TimeUnit.SECONDS);
+        AuthUser authUser = userService.getUserByAppId(appId);
+        authUser.setPassword(null);
+        authUser.setSalt(null);
+
+        LogExeManager.getInstance().executeLogTask(LogTaskFactory.loginLog(appId, IpUtil.getIpFromRequest(WebUtils.toHttp(request)), (byte) 1, "登录成功"));
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("jwt", jwt);
+        map.put("user", authUser);
+
+        return new RequestResult().success(1003, "issue jwt success").addData(map);
+    }
+
 
     @ApiOperation(value = "用户注册", notes = "POST用户注册")
     @PostMapping("/register")
@@ -51,11 +91,12 @@ public class AccountController extends BaseController {
         }
 
         authUser.setUid(uid);
-
-//        String salt = CommonUtil.getRandomString(6);
-        // 存储到数据库的密码为 MD5(原密码+盐值)
-//        authUser.setPassword(MD5Util.md5(realPassword + salt));
-//        authUser.setSalt(salt);
+        String tokenKey = redisTemplate.opsForValue().get("TOKEN_KEY_" + IpUtil.getIpFromRequest(WebUtils.toHttp(request)).toUpperCase()+userKey);
+        String realPassword = AESUtil.aesDecode(password, tokenKey);
+        String salt = CommonUtil.getRandomString(6);
+//         存储到数据库的密码为 MD5(原密码+盐值)
+        authUser.setPassword(MD5Util.md5(realPassword + salt));
+        authUser.setSalt(salt);
         authUser.setPassword(password);
 
         if (!StringUtils.isEmpty(params.get("username"))) {
@@ -95,5 +136,15 @@ public class AccountController extends BaseController {
     @Autowired
     public void setAccountService(AccountService accountService) {
         this.accountService = accountService;
+    }
+
+    @Autowired
+    public void setRedisTemplate(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }
