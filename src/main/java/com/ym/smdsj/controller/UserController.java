@@ -35,16 +35,9 @@ public class UserController {
     @GetMapping("/list/{pageNum}/{pageSize}")
     public RequestResult<PageInfo> getUserListByPage(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         RequestResult<PageInfo> requestResult = new RequestResult<>();
-        try {
-            PageInfo<AuthUser> pageInfo = userService.getUserListByPageInfo(pageNum, pageSize);
-            LOGGER.info("测试日志信息");
-            requestResult.addData(pageInfo).success(200, "");
-        } catch (Exception e) {
-            e.printStackTrace();
-            requestResult.error(600, "查询数据异常");
-        }
+        PageInfo<AuthUser> pageInfo = userService.getUserListByPageInfo(pageNum, pageSize);
+        requestResult.addData(pageInfo).success(200, "");
         return requestResult;
-
 
     }
 

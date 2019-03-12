@@ -7,6 +7,7 @@ import com.ym.smdsj.support.factory.LogTaskFactory;
 import com.ym.smdsj.support.manager.LogExeManager;
 import com.ym.smdsj.util.IpUtil;
 import com.ym.smdsj.util.RequestResponseUtil;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class AccountController {
 
     private AccountService accountService;
 
+    @ApiOperation(value = "用户注册", notes = "POST用户注册")
     @PostMapping("/register")
     public RequestResult register(HttpServletRequest request) {
 
