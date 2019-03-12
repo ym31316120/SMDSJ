@@ -2,6 +2,7 @@ package com.ym.smdsj.service.impl;
 
 import com.ym.smdsj.dao.AuthUserMapper;
 import com.ym.smdsj.domain.po.AuthUser;
+import com.ym.smdsj.domain.vo.Account;
 import com.ym.smdsj.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,13 @@ public class AccountServiceImpl implements AccountService {
         account.setCreateTime(nowDate);
         account.setUpdateTime(nowDate);
         return userMapper.insertSelective(account) == 1 ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+
+    @Override
+    public Account loadAccount(String appId) {
+        AuthUser user = userMapper.selectByUniqueKey(appId);
+        return user != null ? new Account(user.getUsername(),user.getPassword(),user.getSalt()) : null;
     }
 
     @Autowired

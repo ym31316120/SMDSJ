@@ -1,6 +1,7 @@
 package com.ym.smdsj.service;
 
 import com.ym.smdsj.domain.po.AuthUser;
+import com.ym.smdsj.domain.vo.Account;
 
 /**
  * @author ym
@@ -9,4 +10,5 @@ import com.ym.smdsj.domain.po.AuthUser;
 public interface AccountService {
     boolean isAccountExistByUid(String uid);
     boolean registerAccount(AuthUser account);
+    Account loadAccount(String appId);
 }
