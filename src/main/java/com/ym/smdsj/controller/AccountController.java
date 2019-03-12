@@ -3,7 +3,11 @@ package com.ym.smdsj.controller;
 import com.ym.smdsj.domain.po.AuthUser;
 import com.ym.smdsj.domain.vo.RequestResult;
 import com.ym.smdsj.service.AccountService;
+import com.ym.smdsj.support.factory.LogTaskFactory;
+import com.ym.smdsj.support.manager.LogExeManager;
+import com.ym.smdsj.util.IpUtil;
 import com.ym.smdsj.util.RequestResponseUtil;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.Date;
 import java.util.Map;
 
 /**
@@ -78,10 +80,10 @@ public class AccountController {
         authUser.setStatus((byte) 1);
 
         if (accountService.registerAccount(authUser)) {
-//            LogExeManager.getInstance().executeLogTask(LogTaskFactory.registerLog(uid, IpUtil.getIpFromRequest(WebUtils.toHttp(request)), (short) 1, "注册成功"));
+            LogExeManager.getInstance().executeLogTask(LogTaskFactory.registerLog(uid, IpUtil.getIpFromRequest(WebUtils.toHttp(request)), (byte) 1, "注册成功"));
             return new RequestResult().success(200, "注册成功");
         } else {
-//            LogExeManager.getInstance().executeLogTask(LogTaskFactory.registerLog(uid, IpUtil.getIpFromRequest(WebUtils.toHttp(request)), (short) 0, "注册失败"));
+            LogExeManager.getInstance().executeLogTask(LogTaskFactory.registerLog(uid, IpUtil.getIpFromRequest(WebUtils.toHttp(request)), (byte) 0, "注册失败"));
             return new RequestResult().success(1111, "注册失败");
         }
 
