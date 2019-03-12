@@ -5,6 +5,7 @@ import com.ym.smdsj.domain.po.AuthUser;
 import com.ym.smdsj.domain.vo.Account;
 import com.ym.smdsj.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -38,6 +39,12 @@ public class AccountServiceImpl implements AccountService {
     public Account loadAccount(String appId) {
         AuthUser user = userMapper.selectByUniqueKey(appId);
         return user != null ? new Account(user.getUsername(),user.getPassword(),user.getSalt()) : null;
+    }
+
+    @Override
+    public String loadAccountRole(String appId) throws DataAccessException {
+
+        return userMapper.selectUserRoles(appId);
     }
 
     @Autowired

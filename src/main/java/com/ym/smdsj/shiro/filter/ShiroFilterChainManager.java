@@ -2,6 +2,8 @@ package com.ym.smdsj.shiro.filter;
 
 import com.ym.smdsj.service.AccountService;
 import com.ym.smdsj.shiro.config.RestPathMatchingFilterChainResolver;
+import com.ym.smdsj.shiro.provider.ShiroFilterRulesProvider;
+import com.ym.smdsj.shiro.rule.RolePermRule;
 import com.ym.smdsj.support.SpringContextHolder;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
@@ -25,16 +27,16 @@ import java.util.Map;
 public class ShiroFilterChainManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShiroFilterChainManager.class);
 
-//    private final ShiroFilterRulesProvider shiroFilterRulesProvider;
+    private final ShiroFilterRulesProvider shiroFilterRulesProvider;
     private final StringRedisTemplate redisTemplate;
     private final AccountService accountService;
 
     @Autowired
-    public ShiroFilterChainManager(StringRedisTemplate redisTemplate,AccountService accountService){
-//        this.shiroFilterRulesProvider = shiroFilterRulesProvider;
+    public ShiroFilterChainManager(ShiroFilterRulesProvider shiroFilterRulesProvider,StringRedisTemplate redisTemplate,AccountService accountService){
+        this.shiroFilterRulesProvider = shiroFilterRulesProvider;
         this.redisTemplate = redisTemplate;
         this.accountService = accountService;
-    }
+     }
 
     // 初始化获取过滤链
     public Map<String,Filter> initGetFilters() {
@@ -42,10 +44,10 @@ public class ShiroFilterChainManager {
         PasswordFilter passwordFilter = new PasswordFilter();
         passwordFilter.setRedisTemplate(redisTemplate);
         filters.put("auth",passwordFilter);
-//        BJwtFilter jwtFilter = new BJwtFilter();
-//        jwtFilter.setRedisTemplate(redisTemplate);
-//        jwtFilter.setAccountService(accountService);
-//        filters.put("jwt",jwtFilter);
+        BJwtFilter jwtFilter = new BJwtFilter();
+        jwtFilter.setRedisTemplate(redisTemplate);
+        jwtFilter.setAccountService(accountService);
+        filters.put("jwt",jwtFilter);
         return filters;
     }
     // 初始化获取过滤链规则
@@ -58,33 +60,33 @@ public class ShiroFilterChainManager {
         List<String> defalutAuth = Arrays.asList("/account/**");
         defalutAuth.forEach(auth -> filterChain.put(auth,"auth"));
         // -------------dynamic 动态URL
-//        if (shiroFilterRulesProvider != null) {
-//            List<RolePermRule> rolePermRules = this.shiroFilterRulesProvider.loadRolePermRules();
-//            if (null != rolePermRules) {
-//                rolePermRules.forEach(rule -> {
-//                    StringBuilder Chain = rule.toFilterChain();
-//                    if (null != Chain) {
-//                        filterChain.putIfAbsent(rule.getUrl(),Chain.toString());
-//                    }
-//                });
-//            }
-//        }
+        if (shiroFilterRulesProvider != null) {
+            List<RolePermRule> rolePermRules = this.shiroFilterRulesProvider.loadRolePermRules();
+            if (null != rolePermRules) {
+                rolePermRules.forEach(rule -> {
+                    StringBuilder Chain = rule.toFilterChain();
+                    if (null != Chain) {
+                        filterChain.putIfAbsent(rule.getUrl(),Chain.toString());
+                    }
+                });
+            }
+        }
         return filterChain;
     }
     // 动态重新加载过滤链规则
-    public void reloadFilterChain() {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = SpringContextHolder.getBean(ShiroFilterFactoryBean.class);
-        AbstractShiroFilter abstractShiroFilter = null;
-        try {
-            abstractShiroFilter = (AbstractShiroFilter)shiroFilterFactoryBean.getObject();
-            RestPathMatchingFilterChainResolver filterChainResolver = (RestPathMatchingFilterChainResolver)abstractShiroFilter.getFilterChainResolver();
-            DefaultFilterChainManager filterChainManager = (DefaultFilterChainManager)filterChainResolver.getFilterChainManager();
-            filterChainManager.getFilterChains().clear();
-            shiroFilterFactoryBean.getFilterChainDefinitionMap().clear();
-            shiroFilterFactoryBean.setFilterChainDefinitionMap(this.initGetFilterChain());
-            shiroFilterFactoryBean.getFilterChainDefinitionMap().forEach((k,v) -> filterChainManager.createChain(k,v));
-        }catch (Exception e) {
-            LOGGER.error(e.getMessage(),e);
-        }
-    }
+//    public void reloadFilterChain() {
+//        ShiroFilterFactoryBean shiroFilterFactoryBean = SpringContextHolder.getBean(ShiroFilterFactoryBean.class);
+//        AbstractShiroFilter abstractShiroFilter = null;
+//        try {
+//            abstractShiroFilter = (AbstractShiroFilter)shiroFilterFactoryBean.getObject();
+//            RestPathMatchingFilterChainResolver filterChainResolver = (RestPathMatchingFilterChainResolver)abstractShiroFilter.getFilterChainResolver();
+//            DefaultFilterChainManager filterChainManager = (DefaultFilterChainManager)filterChainResolver.getFilterChainManager();
+//            filterChainManager.getFilterChains().clear();
+//            shiroFilterFactoryBean.getFilterChainDefinitionMap().clear();
+//            shiroFilterFactoryBean.setFilterChainDefinitionMap(this.initGetFilterChain());
+//            shiroFilterFactoryBean.getFilterChainDefinitionMap().forEach((k,v) -> filterChainManager.createChain(k,v));
+//        }catch (Exception e) {
+//            LOGGER.error(e.getMessage(),e);
+//        }
+//    }
 }

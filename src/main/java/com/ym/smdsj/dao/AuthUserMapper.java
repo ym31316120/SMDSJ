@@ -25,4 +25,6 @@ public interface AuthUserMapper {
     List<AuthUser> selectUserList() throws DataAccessException;
 
     AuthUser selectByUniqueKey(String appId) throws DataAccessException;
+
+    String selectUserRoles(String appId) throws DataAccessException;
 }

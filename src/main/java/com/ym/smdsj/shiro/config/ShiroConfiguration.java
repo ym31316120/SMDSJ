@@ -1,6 +1,7 @@
 package com.ym.smdsj.shiro.config;
 
 import com.ym.smdsj.shiro.filter.ShiroFilterChainManager;
+import com.ym.smdsj.shiro.filter.StatelessWebSubjectFactory;
 import com.ym.smdsj.shiro.realm.AModularRealmAuthenticator;
 import com.ym.smdsj.shiro.realm.RealmManager;
 import org.apache.shiro.SecurityUtils;
@@ -48,8 +49,8 @@ public class ShiroConfiguration {
 //        // 无状态subjectFactory设置
         DefaultSessionStorageEvaluator evaluator = (DefaultSessionStorageEvaluator)((DefaultSubjectDAO) securityManager.getSubjectDAO()).getSessionStorageEvaluator();
         evaluator.setSessionStorageEnabled(Boolean.FALSE);
-//        StatelessWebSubjectFactory subjectFactory = new StatelessWebSubjectFactory();
-//        securityManager.setSubjectFactory(subjectFactory);
+        StatelessWebSubjectFactory subjectFactory = new StatelessWebSubjectFactory();
+        securityManager.setSubjectFactory(subjectFactory);
 //
         SecurityUtils.setSecurityManager(securityManager);
         return securityManager;
